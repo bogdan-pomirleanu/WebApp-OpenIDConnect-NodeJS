@@ -1,15 +1,15 @@
 
 exports.creds = {
   // Required
-  identityMetadata: 'https://login.microsoftonline.com/<tenant_name>.onmicrosoft.com/.well-known/openid-configuration',
-  // or equivalently: 'https://login.microsoftonline.com/<tenant_guid>/.well-known/openid-configuration'
+  identityMetadata: 'https://login.microsoftonline.com/c1e1ed72-f1a4-4049-9e46-4c91471e0e87/.well-known/openid-configuration',
+  // or equivalently: 'https://login.microsoftonline.com/c1e1ed72-f1a4-4049-9e46-4c91471e0e87/.well-known/openid-configuration'
   //
   // or you can use the common endpoint
   // 'https://login.microsoftonline.com/common/.well-known/openid-configuration'
   // To use the common endpoint, you have to either set `validateIssuer` to false, or provide the `issuer` value.
 
   // Required, the client ID of your app in AAD
-  clientID: '<your_client_id>',
+  clientID: 'VS_Coveo_Connector',
 
   // Required, must be 'code', 'code id_token', 'id_token code' or 'id_token'
   responseType: 'code id_token',
@@ -18,14 +18,14 @@ exports.creds = {
   responseMode: 'form_post',
 
   // Required, the reply URL registered in AAD for your app
-  redirectUrl: 'http://localhost:3000/auth/openid/return',
+  redirectUrl: 'https://coveo-link-osf.herokuapp.com/auth/openid/return',
 
   // Required if we use http for redirectUrl
   allowHttpForRedirectUrl: true,
 
   // Required if `responseType` is 'code', 'id_token code' or 'code id_token'.
   // If app key contains '\', replace it with '\\'.
-  clientSecret: '<your_client_secret>',
+  clientSecret: '3DOx+QL95lm/SQcrdZ7NXrNfcEk95BztX0Z6v6PYGEs=',
 
   // Required to set to false if you don't want to validate issuer
   validateIssuer: true,
@@ -76,7 +76,7 @@ exports.creds = {
 exports.resourceURL = 'https://graph.windows.net';
 
 // The url you need to go to destroy the session with AAD
-exports.destroySessionUrl = 'https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri=http://localhost:3000';
+exports.destroySessionUrl = 'https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri=https://coveo-link-osf.herokuapp.com/';
 
 // If you want to use the mongoDB session store for session middleware, set to true; otherwise we will use the default
 // session store provided by express-session.
