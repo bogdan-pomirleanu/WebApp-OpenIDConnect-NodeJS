@@ -37,9 +37,9 @@ var util = require('util');
 var bunyan = require('bunyan');
 var config = require('./config');
 
+
 // set up database for express session
-var MongoStore = require('connect-mongo')(expressSession);
-var mongoose = require('mongoose');
+var PG = require('connect-pg-simple')(expressSession);
 
 // Start QuickStart here
 
@@ -154,15 +154,11 @@ app.use(methodOverride());
 app.use(cookieParser());
 
 // set up session middleware
-if (config.useMongoDBSessionStore) {
-  mongoose.connect(config.databaseUri);
+if (config.usePG) {
   app.use(express.session({
     secret: 'secret',
-    cookie: {maxAge: config.mongoDBSessionMaxAge * 1000},
-    store: new MongoStore({
-      mongooseConnection: mongoose.connection,
-      clear_interval: config.mongoDBSessionMaxAge
-    })
+    cookie: {maxAge: 30 * 24 * 60 * 60 * 1000},
+    store: new PG()
   }));
 } else {
   app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: false }));
