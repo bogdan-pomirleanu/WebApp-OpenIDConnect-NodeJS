@@ -153,12 +153,11 @@ app.use(express.logger());
 app.use(methodOverride());
 app.use(cookieParser());
 
-var MemcachedStore = require('connect-memjs')(session);
+var MemcachedStore = require('connect-memjs')(expressSession);
 
-// set up session middleware
-if (config.usePG) {
+
   // Session config
-  app.use(session({
+  app.use(expressSession({
     secret: 'ClydeIsASquirrel',
     resave: 'false',
     cookie: {maxAge: 30 * 24 * 60 * 60 * 1000},
@@ -168,9 +167,6 @@ if (config.usePG) {
       prefix: '_session_'
     })
   }));
-} else {
-  app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: false }));
-}
 
 app.use(bodyParser.urlencoded({ extended : true }));
 
