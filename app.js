@@ -160,7 +160,8 @@ app.use(expressSession({
   saveUninitialized: 'false',
   store: new MemcachedStore({
     servers: [process.env.MEMCACHIER_SERVERS],
-    prefix: '_session_'
+    prefix: '_session_',
+    retries: 4
   })
 }));
 
