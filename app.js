@@ -158,16 +158,30 @@ var MemcachedStore = require('connect-memjs')(expressSession);
 
 
   // // Session config
-  app.use(expressSession({
-    secret: 'ClydeIsASquirrel',
-    resave: 'false',
-    cookie: {maxAge: 30 * 24 * 60 * 60 * 1000},
-    saveUninitialized: 'false',
-    store: new MemcachedStore({
-      servers: [process.env.MEMCACHIER_SERVERS],
-      prefix: '_session_'
-    })
-  }));
+  // app.use(expressSession({
+  //   secret: 'ClydeIsASquirrel',
+  //   resave: 'false',
+  //   cookie: {maxAge: 30 * 24 * 60 * 60 * 1000},
+  //   saveUninitialized: 'false',
+  //   store: new MemcachedStore({
+  //     servers: [process.env.MEMCACHIER_SERVERS],
+  //     prefix: '_session_'
+  //   })
+  // }));
+
+var pgSession = require('connect-pg-simple')(session);
+app.use(expressSession({
+    store: new pgSession({
+        conString : process.env.DATABASE_URL
+     }),
+     secret: 'mysessionsecret',
+     resave: false,
+     cookie: {
+         maxAge: 7 * 24 * 60 * 60 * 1000
+     },
+     secure : true
+ }));
+
 
 app.use(bodyParser.urlencoded({ extended : true }));
 
