@@ -38,9 +38,6 @@ var bunyan = require('bunyan');
 var config = require('./config');
 
 
-// set up database for express session
-var PG = require('connect-pg-simple')(expressSession);
-
 // Start QuickStart here
 
 var OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
@@ -156,31 +153,30 @@ app.use(cookieParser());
 
 var MemcachedStore = require('connect-memjs')(expressSession);
 
-
-  // // Session config
-  // app.use(expressSession({
-  //   secret: 'ClydeIsASquirrel',
-  //   resave: 'false',
-  //   cookie: {maxAge: 30 * 24 * 60 * 60 * 1000},
-  //   saveUninitialized: 'false',
-  //   store: new MemcachedStore({
-  //     servers: [process.env.MEMCACHIER_SERVERS],
-  //     prefix: '_session_'
-  //   })
-  // }));
-
-var pgSession = require('connect-pg-simple')(expressSession);
+// Session config
 app.use(expressSession({
-    store: new pgSession({
-        conString : process.env.DATABASE_URL
-     }),
-     secret: 'mysessionsecret',
-     resave: false,
-     cookie: {
-         maxAge: 7 * 24 * 60 * 60 * 1000
-     },
-     secure : true
- }));
+  secret: 'ClydeIsASquirrel',
+  resave: 'false',
+  saveUninitialized: 'false',
+  store: new MemcachedStore({
+    servers: [process.env.MEMCACHIER_SERVERS],
+    prefix: '_session_'
+  })
+}));
+
+
+// var pgSession = require('connect-pg-simple')(expressSession);
+// app.use(expressSession({
+//     store: new pgSession({
+//         conString : process.env.DATABASE_URL
+//      }),
+//      secret: 'mysessionsecret',
+//      resave: false,
+//      cookie: {
+//          maxAge: 7 * 24 * 60 * 60 * 1000
+//      },
+//      secure : true
+//  }));
 
 
 app.use(bodyParser.urlencoded({ extended : true }));
