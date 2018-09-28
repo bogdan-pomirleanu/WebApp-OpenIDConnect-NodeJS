@@ -59,7 +59,7 @@ var log = bunyan.createLogger({
 // this will be as simple as storing the user ID when serializing, and finding
 // the user by ID when deserializing.
 //-----------------------------------------------------------------------------
-/*
+
 passport.serializeUser(function(user, done) {
   done(null, user.oid);
 });
@@ -83,7 +83,7 @@ var findByOid = function(oid, fn) {
   }
   return fn(null, null);
 };
-*/
+
 //-----------------------------------------------------------------------------
 // Use the OIDCStrategy within Passport.
 // 
@@ -158,23 +158,23 @@ var MemcachedStore = require('connect-memjs')(expressSession);
 
 
   // // Session config
-  // app.use(expressSession({
-  //   secret: 'ClydeIsASquirrel',
-  //   resave: 'false',
-  //   cookie: {maxAge: 30 * 24 * 60 * 60 * 1000},
-  //   saveUninitialized: 'false',
-  //   store: new MemcachedStore({
-  //     servers: [process.env.MEMCACHIER_SERVERS],
-  //     prefix: '_session_'
-  //   })
-  // }));
+  app.use(expressSession({
+    secret: 'ClydeIsASquirrel',
+    resave: 'false',
+    cookie: {maxAge: 30 * 24 * 60 * 60 * 1000},
+    saveUninitialized: 'false',
+    store: new MemcachedStore({
+      servers: [process.env.MEMCACHIER_SERVERS],
+      prefix: '_session_'
+    })
+  }));
 
 app.use(bodyParser.urlencoded({ extended : true }));
 
 // Initialize Passport!  Also use passport.session() middleware, to support
 // persistent login sessions (recommended).
 app.use(passport.initialize());
-//app.use(passport.session());
+app.use(passport.session());
 app.use(app.router);
 app.use(express.static(__dirname + '/../../public'));
 
