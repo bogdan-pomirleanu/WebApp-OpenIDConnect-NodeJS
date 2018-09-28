@@ -169,7 +169,7 @@ var MemcachedStore = require('connect-memjs')(expressSession);
   //   })
   // }));
 
-var pgSession = require('connect-pg-simple')(session);
+var pgSession = require('connect-pg-simple')(expressSession);
 app.use(expressSession({
     store: new pgSession({
         conString : process.env.DATABASE_URL
