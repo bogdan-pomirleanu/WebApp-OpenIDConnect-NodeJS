@@ -151,33 +151,21 @@ app.use(express.logger());
 app.use(methodOverride());
 app.use(cookieParser());
 
-var MemcachedStore = require('connect-memjs')(expressSession);
 
-// Session config
+
+
+var pgSession = require('connect-pg-simple')(expressSession);
 app.use(expressSession({
-  secret: 'ClydeIsASquirrel',
-  resave: 'false',
-  saveUninitialized: 'false',
-  store: new MemcachedStore({
-    servers: [process.env.MEMCACHIER_SERVERS],
-    prefix: '_session_',
-    retries: 4
-  })
-}));
-
-
-// var pgSession = require('connect-pg-simple')(expressSession);
-// app.use(expressSession({
-//     store: new pgSession({
-//         conString : process.env.DATABASE_URL
-//      }),
-//      secret: 'mysessionsecret',
-//      resave: false,
-//      cookie: {
-//          maxAge: 7 * 24 * 60 * 60 * 1000
-//      },
-//      secure : true
-//  }));
+    store: new pgSession({
+        conString : process.env.DATABASE_URL
+     }),
+     secret: 'mysessionsecret',
+     resave: false,
+     cookie: {
+         maxAge: 7 * 24 * 60 * 60 * 1000
+     },
+     secure : true
+ }));
 
 
 app.use(bodyParser.urlencoded({ extended : true }));
