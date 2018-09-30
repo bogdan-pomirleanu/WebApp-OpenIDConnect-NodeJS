@@ -41,6 +41,7 @@ var config = require('./config');
 // Start QuickStart here
 
 var OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
+var OIDCBearerStrategy = require('passport-azure-ad').BearerStrategy;
 
 var log = bunyan.createLogger({
     name: 'Microsoft OIDC Example Web Application'
@@ -139,6 +140,33 @@ passport.use(new OIDCStrategy({
   }
 ));
 
+var options = {
+  // The URL of the metadata document for your app. We will put the keys for token validation from the URL found in the jwks_uri tag of the in the metadata.
+  identityMetadata: config.creds.identityMetadata,
+  clientID: config.creds.clientID,
+  validateIssuer: config.creds.validateIssuer,
+  issuer: config.creds.issuer,
+  passReqToCallback: config.creds.passReqToCallback,
+  isB2C: config.creds.isB2C,
+  policyName: config.creds.policyName,
+  allowMultiAudiencesInToken: config.creds.allowMultiAudiencesInToken,
+  audience: config.creds.audience,
+  loggingLevel: config.creds.loggingLevel,
+};
+
+var bearerStrategy = new OIDCBearerStrategy(options,
+  function(token, done) {
+      log.info(token, 'was the token retreived');
+      if (!token.oid)
+          done(new Error('oid is not found in token'));
+      else {
+          owner = token.oid;
+          done(null, token);
+      }
+  }
+);
+
+passport.use(bearerStrategy);
 
 //-----------------------------------------------------------------------------
 // Config the app, include middlewares
@@ -264,7 +292,9 @@ app.get('/logout', function(req, res){
 
 // API aut?
 
-app.get('/search', ensureAuthenticated, function(req, res) {
+
+
+app.get('/api/search',  passport.authenticate('oauth-bearer', {session: false}), function(req, res) {
   log.info("START USERS");
   log.info(users);
   log.info("END USERS");
@@ -298,7 +328,7 @@ app.get('/search', ensureAuthenticated, function(req, res) {
 });
 
 
-app.get('/suggest', ensureAuthenticated, function(req, res) {
+app.get('/api/suggest',  passport.authenticate('oauth-bearer', { session: false}), function(req, res) {
   var q = req.query.q;
   const rp = require("request-promise");
   if (q) {
@@ -328,7 +358,7 @@ app.get('/suggest', ensureAuthenticated, function(req, res) {
 });
 
 
-app.get('/search-complete', ensureAuthenticated, function(req, res) {
+app.get('/api/search-complete',  passport.authenticate('oauth-bearer', {session: false}), function(req, res) {
   var uniqueId = req.query.uniqueId;
   const rp = require("request-promise");
   if (uniqueId) {
