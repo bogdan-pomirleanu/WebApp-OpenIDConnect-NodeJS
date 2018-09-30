@@ -15,7 +15,7 @@ exports.creds = {
   responseType: 'code',
 
   // Required
-  responseMode: 'form_post',
+  responseMode: 'query',
 
   // Required, the reply URL registered in AAD for your app
   redirectUrl: 'https://coveo-link-osf.herokuapp.com/auth/openid/return',
