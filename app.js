@@ -263,7 +263,7 @@ app.get('/logout', function(req, res){
 });
 
 
-app.get('/api', ensureAuthenticated, function(req, res) {
+app.get('/search', ensureAuthenticated, function(req, res) {
   var q = req.query.q;
   const rp = require("request-promise");
   if (q) {
@@ -290,9 +290,66 @@ app.get('/api', ensureAuthenticated, function(req, res) {
   } else {
     res.json({"status": "error", "Error Message": "q was not passed"})
   }
-
-
 });
+
+
+app.get('/suggest', ensureAuthenticated, function(req, res) {
+  var q = req.query.q;
+  const rp = require("request-promise");
+  if (q) {
+
+    const options = {
+      method: "GET",
+      uri: config.suggestionURI,
+      qs: {
+          access_token  : config.coveoSecret,
+          excerptLength : config.excerptLength,
+          q             : q
+      },
+      headers: {
+          'User-Agent': 'Request-Promise'
+      },
+      json: false 
+    };
+
+    rp(options).then(function (r) {
+        const parsedUrl = r ? JSON.parse(r) : {};
+        res.json(parsedUrl);
+    });
+
+  } else {
+    res.json({"status": "error", "Error Message": "q was not passed"})
+  }
+});
+
+
+app.get('/search-complete', ensureAuthenticated, function(req, res) {
+  var uniqueId = req.query.uniqueId;
+  const rp = require("request-promise");
+  if (uniqueId) {
+
+    const options = {
+      method: "GET",
+      uri: config.searchCompleteResultURI,
+      qs: {
+          access_token  : config.coveoSecret,
+          uniqueId      : uniqueId
+      },
+      headers: {
+          'User-Agent': 'Request-Promise'
+      },
+      json: false 
+    };
+
+    rp(options).then(function (r) {
+        res.render(r);
+    });
+
+  } else {
+    res.json({"status": "error", "Error Message": "invalid uniqid"})
+  }
+});
+
 
 
 app.listen(process.env.PORT || 3000);
