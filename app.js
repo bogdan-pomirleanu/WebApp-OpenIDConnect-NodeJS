@@ -120,6 +120,9 @@ passport.use(new OIDCStrategy({
     clockSkew: config.creds.clockSkew,
   },
   function(iss, sub, profile, accessToken, refreshToken, done) {
+    log.info(accessToken);
+    log.info(refreshToken);
+
     if (!profile.oid) {
       return done(new Error("No oid found"), null);
     }
