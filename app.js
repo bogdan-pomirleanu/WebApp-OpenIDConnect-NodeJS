@@ -120,9 +120,6 @@ passport.use(new OIDCStrategy({
     clockSkew: config.creds.clockSkew,
   },
   function(iss, sub, profile, accessToken, refreshToken, done) {
-    log.info(accessToken);
-    log.info(refreshToken);
-
     if (!profile.oid) {
       return done(new Error("No oid found"), null);
     }
@@ -135,9 +132,9 @@ passport.use(new OIDCStrategy({
         if (!user) {
           // "Auto-registration"
           users.push(profile);
-          return done(null, profile);
+          return done(null, accessToken);
         }
-        return done(null, user);
+        return done(null, accessToken);
       });
     });
   }
@@ -255,7 +252,6 @@ app.get('/login',
 // redirected to '/' (home page); otherwise, it passes to the next middleware.
 app.get('/auth/openid/return',
   function(req, res, next) {
-    log.info(req);
     passport.authenticate('azuread-openidconnect', 
       { 
         response: res,                      // required
@@ -266,7 +262,6 @@ app.get('/auth/openid/return',
   },
   function(req, res) {
     log.info('We received a return from AzureAD.');
-    res.json(req);
   });
 
 // 'POST returnURL'
@@ -275,7 +270,6 @@ app.get('/auth/openid/return',
 // redirected to '/' (home page); otherwise, it passes to the next middleware.
 app.post('/auth/openid/return',
   function(req, res, next) {
-    log.info(req);
   
     passport.authenticate('azuread-openidconnect', 
       { 
@@ -287,7 +281,6 @@ app.post('/auth/openid/return',
   },
   function(req, res) {
     log.info('We received a return from AzureAD.');
-    res.json(req);
   });
 
 // 'logout' route, logout from passport, and destroy the session with AAD.
@@ -303,10 +296,6 @@ app.get('/logout', function(req, res){
 
 
 app.get('/api/search',  passport.authenticate('oauth-bearer', {session: false}), function(req, res) {
-  log.info("START USERS");
-  log.info(users);
-  log.info("END USERS");
-
   var q = req.query.q;
   const rp = require("request-promise");
   if (q) {
