@@ -215,7 +215,6 @@ app.get('/login',
   },
   function(req, res) {
     log.info('Login was called in the Sample');
-    log.info(res);
     res.redirect('/');
 });
 
@@ -234,7 +233,6 @@ app.get('/auth/openid/return',
   },
   function(req, res) {
     log.info('We received a return from AzureAD.');
-    log.info(res);
     res.redirect('/');
   });
 
@@ -253,7 +251,6 @@ app.post('/auth/openid/return',
   },
   function(req, res) {
     log.info('We received a return from AzureAD.');
-    log.info(res);
     res.redirect('/');
   });
 
@@ -265,8 +262,10 @@ app.get('/logout', function(req, res){
   });
 });
 
+// API aut?
 
 app.get('/search', ensureAuthenticated, function(req, res) {
+  log.info(users);
   var q = req.query.q;
   const rp = require("request-promise");
   if (q) {
