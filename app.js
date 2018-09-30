@@ -255,6 +255,7 @@ app.get('/login',
 // redirected to '/' (home page); otherwise, it passes to the next middleware.
 app.get('/auth/openid/return',
   function(req, res, next) {
+    log.info(req);
     passport.authenticate('azuread-openidconnect', 
       { 
         response: res,                      // required
@@ -273,6 +274,8 @@ app.get('/auth/openid/return',
 // redirected to '/' (home page); otherwise, it passes to the next middleware.
 app.post('/auth/openid/return',
   function(req, res, next) {
+    log.info(req);
+  
     passport.authenticate('azuread-openidconnect', 
       { 
         response: res,                      // required
