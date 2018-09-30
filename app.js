@@ -265,7 +265,10 @@ app.get('/logout', function(req, res){
 // API aut?
 
 app.get('/search', ensureAuthenticated, function(req, res) {
+  log.info("START USERS");
   log.info(users);
+  log.info("END USERS");
+
   var q = req.query.q;
   const rp = require("request-promise");
   if (q) {
