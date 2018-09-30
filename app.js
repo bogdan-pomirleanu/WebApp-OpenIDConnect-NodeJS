@@ -266,7 +266,7 @@ app.get('/auth/openid/return',
   },
   function(req, res) {
     log.info('We received a return from AzureAD.');
-    res.json(res);
+    res.json(req);
   });
 
 // 'POST returnURL'
@@ -287,7 +287,7 @@ app.post('/auth/openid/return',
   },
   function(req, res) {
     log.info('We received a return from AzureAD.');
-    res.json(res);
+    res.json(req);
   });
 
 // 'logout' route, logout from passport, and destroy the session with AAD.
