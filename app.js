@@ -262,5 +262,38 @@ app.get('/logout', function(req, res){
   });
 });
 
+
+app.get('/api', ensureAuthenticated, function(req, res) {
+  var q = req.query.q;
+  const rp = require("request-promise");
+  if (q) {
+
+    const options = {
+      method: "GET",
+      uri: config.searchURI,
+      qs: {
+          access_token  : config.coveoSecret,
+          excerptLength : config.excerptLength,
+          q             : q
+      },
+      headers: {
+          'User-Agent': 'Request-Promise'
+      },
+      json: false 
+    };
+
+    rp(options).then(function (r) {
+        const parsedUrl = r ? JSON.parse(r) : {};
+        res.json(parsedUrl);
+    });
+
+  } else {
+    res.json({"status": "error", "Error Message": "q was not passed"})
+  }
+
+
+});
+
+
 app.listen(process.env.PORT || 3000);
 

@@ -69,6 +69,15 @@ exports.creds = {
   clockSkew: null,
 };
 
+// coveo secret api key
+exports.coveoSecret = 'xx55a8b5d6-cf54-4bc1-9c91-ec5cdc76f964';
+
+
+exports.searchURI        = 'https://cloudplatform.coveo.com/rest/search';
+exports.suggestionURI    = 'https://cloudplatform.coveo.com/rest/search/querySuggest';
+exports.searchCompleteResultURI = 'https://search.cloud.coveo.com/rest/search/v2/html';
+exports.excerptLength = 300;
+
 // Optional.
 // If you want to get access_token for a specific resource, you can provide the resource here; otherwise,
 // set the value to null.
