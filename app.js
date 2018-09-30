@@ -215,6 +215,7 @@ app.get('/login',
   },
   function(req, res) {
     log.info('Login was called in the Sample');
+    log.info(res);
     res.redirect('/');
 });
 
@@ -233,7 +234,8 @@ app.get('/auth/openid/return',
   },
   function(req, res) {
     log.info('We received a return from AzureAD.');
-    res.send(200, res);
+    log.info(res);
+    res.redirect('/');
   });
 
 // 'POST returnURL'
@@ -251,7 +253,8 @@ app.post('/auth/openid/return',
   },
   function(req, res) {
     log.info('We received a return from AzureAD.');
-    res.send(200, res);
+    log.info(res);
+    res.redirect('/');
   });
 
 // 'logout' route, logout from passport, and destroy the session with AAD.
