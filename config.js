@@ -12,7 +12,7 @@ exports.creds = {
   clientID: '260f2967-00b4-4925-bd20-0f4d8b6d9586',
 
   // Required, must be 'code', 'code id_token', 'id_token code' or 'id_token'
-  responseType: 'code id_token',
+  responseType: 'code',
 
   // Required
   responseMode: 'form_post',
